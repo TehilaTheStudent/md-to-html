@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.text());
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 app.post('/convert', (req, res) => {
   const markdown = typeof req.body === 'string' ? req.body : req.body.markdown;
   
