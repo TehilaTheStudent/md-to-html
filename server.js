@@ -34,6 +34,24 @@ app.get('/extract-id', (req, res) => {
   res.status(400).json({ error: 'Could not extract ID from URL' });
 });
 
+app.post('/base64', (req, res) => {
+  const items = Array.isArray(req.body) ? req.body : [req.body];
+
+  const updatedItems = items.map((item) => {
+    const rawValue = item?.text_bash_history;
+    const safeString = rawValue !== undefined && rawValue !== null
+      ? String(rawValue)
+      : "";
+
+    const base64BashHistory = Buffer.from(safeString).toString("base64");
+    item.base64_bash_history = base64BashHistory;
+
+    return item;
+  });
+
+  res.json(updatedItems);
+});
+
 app.post('/convert', (req, res) => {
   const markdown = typeof req.body === 'string' ? req.body : req.body.markdown;
   
